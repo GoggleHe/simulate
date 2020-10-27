@@ -6,7 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Controller
@@ -15,18 +18,20 @@ public class MemoryController {
 
     private static final Logger log = LoggerFactory.getLogger(MemoryController.class);
 
-    private static ConcurrentHashMap<Integer,BigObject> map = new ConcurrentHashMap();
+    private static List<BigObject> list = new ArrayList<>();
 
     @GetMapping("bigObject")
-    public void bigObject(int size){
-        log.info("bigObject start");
+    @ResponseBody
+    public String bigObject(int size){
+        log.info("bigObject start size = {}", size);
         if (size == 0) {
             size = 1024;
         }
         BigObject bigObject = new BigObject(size);
-        map.put(size, bigObject);
+        list.add(bigObject);
 
         log.info("bigObject end");
+        return "ok";
     }
 
 }
